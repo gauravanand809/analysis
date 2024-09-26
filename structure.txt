@@ -1,0 +1,51 @@
+.
+├── next.config.js
+├── next-env.d.ts
+├── package.json
+├── package-lock.json
+├── postcss.config.js
+├── public
+│   ├── next.svg
+│   └── vercel.svg
+├── README.md
+├── src
+│   ├── app
+│   │   ├── api
+│   │   │   └── users
+│   │   │       ├── login
+│   │   │       │   └── route.ts
+│   │   │       ├── logout
+│   │   │       │   └── route.ts
+│   │   │       ├── me
+│   │   │       │   └── route.ts
+│   │   │       ├── signup
+│   │   │       │   └── route.ts
+│   │   │       └── verifyemail
+│   │   │           └── route.ts
+│   │   ├── favicon.ico
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   ├── login
+│   │   │   └── page.tsx
+│   │   ├── page.tsx
+│   │   ├── profile
+│   │   │   ├── [id]
+│   │   │   │   └── page.tsx
+│   │   │   └── page.tsx
+│   │   ├── signup
+│   │   │   └── page.tsx
+│   │   └── verifyemail
+│   │       └── page.tsx
+│   ├── dbConfig
+│   │   └── dbConfig.ts
+│   ├── helpers
+│   │   ├── getDataFromToken.ts
+│   │   └── mailer.ts
+│   ├── middleware.ts
+│   └── models
+│       └── userModel.js
+├── structure.txt
+├── tailwind.config.js
+└── tsconfig.json
+
+19 directories, 30 files
