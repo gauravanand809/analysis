@@ -5,16 +5,16 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Define paths for NextAuth that should bypass the middleware
-  const authPaths = [
-    "/api/auth/callback/google",
-    "/api/auth/callback/github",
-    "/api/auth/login",
-  ];
+  // const authPaths = [
+  //   "/api/auth/callback/google",
+  //   "/api/auth/callback/github",
+  //   "/api/auth/login",
+  // ];
 
-  // Check if the request path is in the NextAuth paths
-  if (authPaths.some((authPath) => path.startsWith(authPath))) {
-    return NextResponse.next(); // Bypass middleware for NextAuth routes
-  }
+  // // Check if the request path is in the NextAuth paths
+  // if (authPaths.some((authPath) => path.startsWith(authPath))) {
+  //   return NextResponse.next(); // Bypass middleware for NextAuth routes
+  // }
 
   // Your existing middleware logic
   const token = request.cookies.get("token")?.value || "";

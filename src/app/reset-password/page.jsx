@@ -3,10 +3,13 @@
 "use client"; // Mark this component as a Client Component
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Use 'next/navigation' instead of 'next/router'
+import { useRouter, useSearchParams } from 'next/navigation'; // Import useSearchParams
 
 const ResetPasswordPage = () => {
     const router = useRouter();
+    const searchParams = useSearchParams(); // Use useSearchParams to get query params
+    const token = searchParams.get('token'); // Extract token from URL
+
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
@@ -15,24 +18,21 @@ const ResetPasswordPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(token);
 
         if (newPassword !== confirmPassword) {
             setError("Passwords do not match.");
             return;
         }
 
-        if (router && router.query && router.query.token) {
-            const token = router.query.token;
-            // Your code to use the token
-          } else {
-            // Handle the case where the token is missing
-            console.error("Token is missing from the URL.");
-            // Redirect to an error page or display a message to the user.
-          }
+        if (!token) {
+            setError("Token is missing from the URL.");
+            return;
+        }
 
         try {
             setLoading(true); // Start loading state
-            const response = await fetch('/api/reset-password', {
+            const response = await fetch('/api/users/reset-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
