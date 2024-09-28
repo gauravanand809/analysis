@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
+
 export default function SignupPage() {
   const router = useRouter();
   const [user, setUser] = useState({
@@ -20,9 +21,10 @@ export default function SignupPage() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/signup", user);
-      console.log("Signup success", response.data);
+      console.log("Signup success", response);
       toast.success("Signup successful");
-      router.push("/login");
+      // console.log("Redirecting to profile");
+      window.location.href = "/verifyemail";
     } catch (error: any) {
       console.log("Signup failed", error.message);
       toast.error(error.message);

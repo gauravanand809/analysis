@@ -11,6 +11,9 @@
 ├── src
 │   ├── app
 │   │   ├── api
+│   │   │   ├── auth
+│   │   │   │   └── [...nextauth]
+│   │   │   │       └── route.js
 │   │   │   └── users
 │   │   │       ├── login
 │   │   │       │   └── route.ts
@@ -23,6 +26,8 @@
 │   │   │       └── verifyemail
 │   │   │           └── route.ts
 │   │   ├── favicon.ico
+│   │   ├── forgot-password
+│   │   │   └── page.tsx
 │   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   ├── login
@@ -36,6 +41,8 @@
 │   │   │   └── page.tsx
 │   │   └── verifyemail
 │   │       └── page.tsx
+│   ├── components
+│   │   └── SessionProviderWrapper.tsx
 │   ├── dbConfig
 │   │   └── dbConfig.ts
 │   ├── helpers
@@ -48,4 +55,4 @@
 ├── tailwind.config.js
 └── tsconfig.json
 
-19 directories, 30 files
+23 directories, 33 files

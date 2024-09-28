@@ -1,52 +1,59 @@
+
+// helpers/mailer.ts
+
 import nodemailer from 'nodemailer';
 import User from "@/models/userModel";
-import bcryptjs from 'bcryptjs';
-require("dotenv").config();
+import crypto from 'crypto';
+import dotenv from 'dotenv';
 
-export const sendEmail = async({email, emailType, userId}:any) => {
+dotenv.config();
+
+export const sendEmail = async ({ email, emailType, userId }: any) => {
     try {
-        // create a hased token
-        const hashedToken = await bcryptjs.hash(userId.toString(), 10)
+        const token = crypto.randomBytes(32).toString('hex');
 
         if (emailType === "VERIFY") {
-            await User.findByIdAndUpdate(userId, 
-                {verifyToken: hashedToken, verifyTokenExpiry: Date.now() + 3600000})
-        } else if (emailType === "RESET"){
-            await User.findByIdAndUpdate(userId, 
-                {forgotPasswordToken: hashedToken, forgotPasswordTokenExpiry: Date.now() + 3600000})
+            await User.findByIdAndUpdate(userId, {
+                verifyToken: token,
+                verifyTokenExpiry: Date.now() + 3600000, // 1 hour
+            });
+        } else if (emailType === "RESET") {
+            await User.findByIdAndUpdate(userId, {
+                forgotPasswordToken: token,
+                forgotPasswordTokenExpiry: Date.now() + 3600000, // 1 hour
+            });
         }
 
-            var transport = nodemailer.createTransport({
-            host: "live.smtp.mailtrap.io",
-            port: 587,
+        const transport = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: Number(process.env.SMTP_PORT),
             auth: {
-                user: "api",
-                pass: "6c7b9d9154ccd42c318883e9db109529",
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
             },
-            });
+        });
+
+    const verificationUrl = `http://${process.env.DOMAIN}/reset-password?token=${token}`;
 
 
         const mailOptions = {
-          from: "support@demomailtrap.com",
-          to: email,
-          subject:
-            emailType === "VERIFY"
-              ? "Verify your email"
-              : "Reset your password",
-          html: `<p>Click <a href="${
-            process.env.DOMAIN
-          }/verifyemail?token=${hashedToken}">here</a> to ${
-            emailType === "VERIFY" ? "verify your email" : "reset your password"
-          }
-            or copy and paste the link below in your browser. <br> ${
-              process.env.DOMAIN
-            }/verifyemail?token=${hashedToken}
-            </p>`,
+            from: "support@feedback360.xyz",
+            to: email,
+            subject:
+                emailType === "VERIFY"
+                    ? "Verify your email"
+                    : "Reset your password",
+            html: `<p>Click <a href="${verificationUrl}">here</a> to ${
+                emailType === "VERIFY" ? "verify your email" : "reset your password"
+            }, or copy and paste the link below in your browser.<br/>${verificationUrl}</p>`,
         };
-        const mailresponse = await transport.sendMail(mailOptions);
-        return mailresponse;
 
-    } catch (error:any) {
+        const mailResponse = await transport.sendMail(mailOptions);
+        console.log("Mail response:", mailResponse); // Log the mail response
+        return mailResponse;
+
+    } catch (error: any) {
+        console.error("Error in sendEmail:", error);
         throw new Error(error.message);
     }
-}
+};
